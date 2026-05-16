@@ -5,7 +5,7 @@
 const $=id=>document.getElementById(id);
 
 /* ===== FIREBASE — Fill your config below ===== */
-const FB_CONFIG={apiKey:"",authDomain:"",projectId:"",storageBucket:"",messagingSenderId:"",appId:""};
+const FB_CONFIG={apiKey:"AIzaSyA_iRPCBRmeAs0_LHpTKpB2qhDy1LpwkRk",authDomain:"aircraft-eadb0.firebaseapp.com",projectId:"aircraft-eadb0",storageBucket:"aircraft-eadb0.firebasestorage.app",messagingSenderId:"792879773504",appId:"1:792879773504:web:5a87c70e536f13713eeca5"};
 let fbApp,fbAuth,fbFS,fbReady=false;
 function ldScript(src){return new Promise((r,j)=>{const s=document.createElement('script');s.src=src;s.onload=r;s.onerror=j;document.head.appendChild(s)})}
 async function loadFirebase(){
