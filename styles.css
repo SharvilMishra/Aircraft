@@ -1,0 +1,483 @@
+/* ================================================================
+   VOID STRIKER — Custom Styles
+   All styling not covered by Tailwind utilities
+   ================================================================ */
+
+/* ==================== BASE RESET & GLOBALS ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Subtle custom scrollbar for scrollable screens */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #535c91;
+  border-radius: 2px;
+}
+
+/* ==================== STARFIELD BACKGROUND ==================== */
+#starfield-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ==================== SCREEN SYSTEM ==================== */
+.screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  -webkit-overflow-scrolling: touch;
+}
+
+.screen.active {
+  display: flex;
+  opacity: 1;
+}
+
+.screen.fading {
+  opacity: 0;
+}
+
+/* ==================== GLASS MORPHISM ==================== */
+.glass {
+  background: rgba(27, 26, 85, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(83, 92, 145, 0.35);
+  border-radius: 12px;
+}
+
+.glass-strong {
+  background: rgba(27, 26, 85, 0.8);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(83, 92, 145, 0.5);
+  border-radius: 14px;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn-primary {
+  background: linear-gradient(135deg, #00e5ff, #0091ea);
+  color: #070f2b;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.95rem;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #9290c3;
+  border: 1.5px solid #535c91;
+  border-radius: 10px;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-family: 'Orbitron', monospace;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  letter-spacing: 0.5px;
+}
+
+.btn-secondary:active {
+  background: rgba(83, 92, 145, 0.25);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #ffd740, #ffab00);
+  color: #070f2b;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 15px rgba(255, 215, 64, 0.3);
+}
+
+.btn-gold:active {
+  transform: scale(0.96);
+}
+
+/* ==================== INPUT FIELDS ==================== */
+.input-field {
+  background: rgba(7, 15, 43, 0.7);
+  border: 1.5px solid #535c91;
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: #e0e0e0;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.05rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: #00e5ff;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+}
+
+.input-field::placeholder {
+  color: #535c91;
+}
+
+/* ==================== TOGGLE SWITCHES ==================== */
+.toggle-btn {
+  width: 48px;
+  height: 28px;
+  border-radius: 14px;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  background: #535c91;
+  transition: background 0.25s ease;
+  flex-shrink: 0;
+}
+
+.toggle-btn[data-on="true"] {
+  background: #00e5ff;
+}
+
+.toggle-knob {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  transition: left 0.25s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-btn[data-on="true"] .toggle-knob {
+  left: 24px;
+}
+
+/* ==================== HUD ELEMENTS ==================== */
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hud-bar-bg {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(7, 15, 43, 0.6);
+  overflow: hidden;
+  border: 1px solid rgba(83, 92, 145, 0.3);
+}
+
+.hud-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+/* ==================== BUFF INDICATORS ==================== */
+.buff-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-family: 'Orbitron', monospace;
+  font-weight: 600;
+}
+
+.buff-burst {
+  background: rgba(255, 235, 59, 0.2);
+  color: #ffeb3b;
+  border: 1px solid rgba(255, 235, 59, 0.3);
+}
+
+.buff-attack {
+  background: rgba(255, 82, 82, 0.2);
+  color: #ff5252;
+  border: 1px solid rgba(255, 82, 82, 0.3);
+}
+
+.buff-shield {
+  background: rgba(68, 138, 255, 0.2);
+  color: #448aff;
+  border: 1px solid rgba(68, 138, 255, 0.3);
+}
+
+/* ==================== STAGE DOTS ==================== */
+.stage-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #535c91;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.stage-dot.completed {
+  background: #00e676;
+  border-color: #00e676;
+  box-shadow: 0 0 6px rgba(0, 230, 118, 0.5);
+}
+
+.stage-dot.current {
+  background: #00e5ff;
+  border-color: #00e5ff;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.stage-dot.locked {
+  opacity: 0.35;
+}
+
+/* ==================== LEVEL CARDS ==================== */
+.level-card {
+  transition: transform 0.15s ease, border-color 0.2s ease;
+}
+
+.level-card:active {
+  transform: scale(0.97);
+}
+
+/* ==================== AIRCRAFT CARDS ==================== */
+.aircraft-card {
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.aircraft-card:active {
+  transform: scale(0.97);
+}
+
+.aircraft-card.selected {
+  border-color: #00e5ff !important;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+}
+
+.aircraft-card.locked {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.aircraft-card.locked:active {
+  transform: none;
+}
+
+/* ==================== STAT BARS ==================== */
+.stat-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(7, 15, 43, 0.5);
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* ==================== TOAST NOTIFICATION ==================== */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 12px 24px;
+  border-radius: 10px;
+  z-index: 100;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  background: rgba(27, 26, 85, 0.9);
+  border: 1px solid #535c91;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==================== PRESTAGE SHIP PREVIEW ==================== */
+#prestage-ship {
+  image-rendering: auto;
+}
+
+/* ==================== ANIMATIONS ==================== */
+
+/* Slide in from bottom on screen entry */
+@keyframes slide-in-bottom {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.anim-slide-in {
+  animation: slide-in-bottom 0.4s ease-out both;
+}
+
+/* Pulsing glow on current stage dot */
+@keyframes pulse-dot {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.9);
+  }
+}
+
+/* Title glow on login screen */
+@keyframes title-glow {
+  0%, 100% {
+    text-shadow:
+      0 0 20px rgba(0, 229, 255, 0.3),
+      0 0 40px rgba(0, 229, 255, 0.1);
+  }
+  50% {
+    text-shadow:
+      0 0 30px rgba(0, 229, 255, 0.5),
+      0 0 60px rgba(0, 229, 255, 0.2);
+  }
+}
+
+.title-glow {
+  animation: title-glow 3s ease-in-out infinite;
+}
+
+/* Floating text (cash earned, damage numbers) */
+@keyframes float-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}
+
+.float-text {
+  position: absolute;
+  pointer-events: none;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  animation: float-up 0.8s ease-out forwards;
+}
+
+/* Glow pulse for active elements */
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(0, 229, 255, 0.7));
+  }
+}
+
+/* Screen shake on player hit */
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-3px, 2px); }
+  20% { transform: translate(3px, -2px); }
+  30% { transform: translate(-2px, 3px); }
+  40% { transform: translate(2px, -1px); }
+  50% { transform: translate(-1px, 2px); }
+  60% { transform: translate(1px, -2px); }
+  70% { transform: translate(-2px, 1px); }
+  80% { transform: translate(2px, 1px); }
+  90% { transform: translate(-1px, -1px); }
+}
+
+.screen-shake {
+  animation: screen-shake 0.3s ease-out;
+}
+
+/* ==================== REDUCED MOTION ==================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==================== SMALL SCREEN TWEAKS ==================== */
+@media (max-width: 360px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-gold {
+    padding: 12px 20px;
+    font-size: 0.85rem;
+  }
+
+  .glass-strong {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 640px) {
+  .glass-strong {
+    padding: 28px;
+  }
+}

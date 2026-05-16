@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VOID STRIKER</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#070f2b',
+            purple: '#1b1a55',
+            mauve: '#535c91',
+            lavender: '#9290c3',
+            accent: '#00e5ff',
+            gold: '#ffd740',
+            danger: '#ff4757',
+            success: '#00e676',
+            burst: '#ffeb3b',
+            attack: '#ff5252',
+            shield: '#448aff'
+          },
+          fontFamily: {
+            display: ['Orbitron', 'monospace'],
+            body: ['Rajdhani', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="font-body bg-navy text-gray-200 overflow-hidden h-dvh w-screen relative">
+
+  <!-- Background Starfield Canvas -->
+  <canvas id="starfield-bg" aria-hidden="true"></canvas>
+
+  <!-- ==================== LOGIN SCREEN ==================== -->
+  <section id="login-screen" class="screen active" role="main">
+    <div class="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-6">
+
+      <!-- Logo -->
+      <div class="text-center mb-2 anim-slide-in">
+        <h1 class="font-display text-3xl sm:text-4xl font-black tracking-wider text-accent title-glow">
+          VOID STRIKER
+        </h1>
+        <p class="text-sm mt-2 tracking-widest text-mauve">DEEP SPACE COMBAT</p>
+      </div>
+
+      <!-- Login Card -->
+      <div id="login-card" class="glass-strong w-full max-w-sm p-6 flex flex-col gap-4 anim-slide-in" style="animation-delay:.1s">
+        <h2 class="font-display text-lg font-bold text-center text-lavender">PILOT LOGIN</h2>
+        <div class="flex flex-col gap-3">
+          <input id="login-email" type="email" class="input-field" placeholder="Email address" autocomplete="email">
+          <input id="login-pass" type="password" class="input-field" placeholder="Password" autocomplete="current-password">
+          <button id="btn-login-email" class="btn-primary w-full mt-1">LOGIN</button>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="flex-1 h-px bg-mauve"></div>
+          <span class="text-xs text-mauve">OR</span>
+          <div class="flex-1 h-px bg-mauve"></div>
+        </div>
+        <button id="btn-login-google" class="btn-secondary w-full flex items-center justify-center gap-2">
+          <i class="fab fa-google"></i> SIGN IN WITH GOOGLE
+        </button>
+        <p class="text-center text-sm text-mauve">
+          No account? <button id="btn-show-register" class="underline text-lavender">Register</button>
+        </p>
+      </div>
+
+      <!-- Register Card (hidden by default) -->
+      <div id="register-card" class="glass-strong w-full max-w-sm p-6 flex-col gap-4 hidden anim-slide-in">
+        <h2 class="font-display text-lg font-bold text-center text-lavender">CREATE ACCOUNT</h2>
+        <div class="flex flex-col gap-3">
+          <input id="reg-name" type="text" class="input-field" placeholder="Pilot callsign" autocomplete="username">
+          <input id="reg-email" type="email" class="input-field" placeholder="Email address" autocomplete="email">
+          <input id="reg-pass" type="password" class="input-field" placeholder="Password (min 6 chars)" autocomplete="new-password">
+          <button id="btn-register" class="btn-primary w-full mt-1">REGISTER</button>
+        </div>
+        <p class="text-center text-sm text-mauve">
+          Have an account? <button id="btn-show-login" class="underline text-lavender">Login</button>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== DASHBOARD SCREEN ==================== -->
+  <section id="dashboard-screen" class="screen">
+    <div class="flex-1 flex flex-col px-4 py-4 gap-4 overflow-y-auto">
+
+      <!-- Header -->
+      <header class="flex items-center justify-between">
+        <h1 class="font-display text-xl font-bold text-accent">VOID STRIKER</h1>
+        <button id="btn-settings" class="w-10 h-10 flex items-center justify-center rounded-lg bg-mauve/25" aria-label="Settings">
+          <i class="fas fa-cog text-lavender"></i>
+        </button>
+      </header>
+
+      <!-- Profile Card -->
+      <div class="glass p-4 flex items-center gap-4">
+        <div id="profile-avatar" class="w-14 h-14 rounded-full flex items-center justify-center font-display font-bold text-xl bg-gradient-to-br from-purple to-mauve text-accent">
+          P
+        </div>
+        <div class="flex-1">
+          <p class="font-display font-bold text-base" id="profile-name">Pilot</p>
+          <p class="text-sm text-mauve">
+            Level <span id="profile-level">0</span> &bull; Stage <span id="profile-stage">1</span>/5
+          </p>
+        </div>
+        <div class="text-right">
+          <p class="text-xs text-mauve">UNIVERSE CASH</p>
+          <p class="font-display font-bold text-lg text-gold" id="profile-cash">0</p>
+        </div>
+      </div>
+
+      <!-- Continue Button -->
+      <button id="btn-continue" class="btn-primary w-full py-4 text-base flex items-center justify-center gap-3">
+        <i class="fas fa-play"></i> CONTINUE MISSION
+      </button>
+
+      <!-- Menu Grid -->
+      <div class="grid grid-cols-2 gap-3">
+        <button id="btn-levels" class="glass p-4 flex flex-col items-center gap-2 level-card">
+          <i class="fas fa-layer-group text-2xl text-accent"></i>
+          <span class="font-display text-sm font-bold">LEVELS</span>
+        </button>
+        <button id="btn-hangar" class="glass p-4 flex flex-col items-center gap-2 level-card">
+          <i class="fas fa-rocket text-2xl text-gold"></i>
+          <span class="font-display text-sm font-bold">HANGAR</span>
+        </button>
+        <button id="btn-profile" class="glass p-4 flex flex-col items-center gap-2 level-card">
+          <i class="fas fa-user text-2xl text-lavender"></i>
+          <span class="font-display text-sm font-bold">PROFILE</span>
+        </button>
+        <button id="btn-logout" class="glass p-4 flex flex-col items-center gap-2 level-card border-danger/30">
+          <i class="fas fa-sign-out-alt text-2xl text-danger"></i>
+          <span class="font-display text-sm font-bold text-danger">LOGOUT</span>
+        </button>
+      </div>
+
+      <!-- Stats Summary -->
+      <div class="glass p-4">
+        <p class="font-display text-xs font-bold mb-3 text-mauve">MISSION STATS</p>
+        <div class="grid grid-cols-3 gap-3 text-center">
+          <div>
+            <p class="font-display font-bold text-lg text-accent" id="stat-stages">0</p>
+            <p class="text-xs text-mauve">Stages Cleared</p>
+          </div>
+          <div>
+            <p class="font-display font-bold text-lg text-gold" id="stat-cash-earned">0</p>
+            <p class="text-xs text-mauve">Total Earned</p>
+          </div>
+          <div>
+            <p class="font-display font-bold text-lg text-lavender" id="stat-aircraft">1</p>
+            <p class="text-xs text-mauve">Aircraft Owned</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-4"></div>
+    </div>
+  </section>
+
+  <!-- ==================== LEVEL SELECT SCREEN ==================== -->
+  <section id="level-select-screen" class="screen">
+    <div class="flex-1 flex flex-col px-4 py-4 gap-3 overflow-y-auto">
+      <header class="flex items-center gap-3">
+        <button id="btn-levels-back" class="w-10 h-10 flex items-center justify-center rounded-lg bg-mauve/25" aria-label="Back">
+          <i class="fas fa-chevron-left text-lavender"></i>
+        </button>
+        <h1 class="font-display text-lg font-bold text-lavender">SELECT LEVEL</h1>
+      </header>
+      <div id="level-list" class="flex flex-col gap-3 pb-6">
+        <!-- Level cards injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== AIRCRAFT HANGAR SCREEN ==================== -->
+  <section id="aircraft-screen" class="screen">
+    <div class="flex-1 flex flex-col px-4 py-4 gap-3 overflow-y-auto">
+      <header class="flex items-center gap-3">
+        <button id="btn-hangar-back" class="w-10 h-10 flex items-center justify-center rounded-lg bg-mauve/25" aria-label="Back">
+          <i class="fas fa-chevron-left text-lavender"></i>
+        </button>
+        <h1 class="font-display text-lg font-bold text-lavender">HANGAR</h1>
+        <div class="ml-auto flex items-center gap-1">
+          <i class="fas fa-coins text-sm text-gold"></i>
+          <span class="font-display font-bold text-sm text-gold" id="hangar-cash">0</span>
+        </div>
+      </header>
+      <div id="aircraft-list" class="flex flex-col gap-3 pb-6">
+        <!-- Aircraft cards injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PRE-STAGE SCREEN ==================== -->
+  <section id="pre-stage-screen" class="screen">
+    <div class="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-5">
+      <header class="w-full flex items-center gap-3">
+        <button id="btn-prestage-back" class="w-10 h-10 flex items-center justify-center rounded-lg bg-mauve/25" aria-label="Back">
+          <i class="fas fa-chevron-left text-lavender"></i>
+        </button>
+        <h1 class="font-display text-base font-bold text-lavender">MISSION BRIEFING</h1>
+      </header>
+
+      <div class="glass-strong w-full max-w-sm p-5 flex flex-col items-center gap-4">
+        <p class="font-display text-2xl font-black text-accent" id="prestage-title">Level 0 - Stage 1</p>
+
+        <!-- Ship Preview Canvas -->
+        <canvas id="prestage-ship" width="120" height="120"></canvas>
+
+        <p class="font-display text-sm font-bold text-lavender" id="prestage-ship-name">Starter Craft</p>
+
+        <!-- Stats Grid -->
+        <div class="w-full grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-mauve">Damage</span>
+            <span class="font-display font-bold" id="prestat-dmg">1.0x</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-mauve">Fire Rate</span>
+            <span class="font-display font-bold" id="prestat-fr">1.0x</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-mauve">Health</span>
+            <span class="font-display font-bold" id="prestat-hp">1.0x</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-mauve">Speed</span>
+            <span class="font-display font-bold" id="prestat-spd">1.0x</span>
+          </div>
+        </div>
+
+        <div class="w-full h-px bg-mauve"></div>
+
+        <!-- Reward Preview -->
+        <div class="flex items-center gap-2">
+          <i class="fas fa-coins text-gold"></i>
+          <span class="text-sm text-mauve">Reward:</span>
+          <span class="font-display font-bold text-gold" id="prestage-reward">100 - 150</span>
+        </div>
+
+        <!-- Launch Button -->
+        <button id="btn-start-stage" class="btn-primary w-full py-4 text-base mt-2">LAUNCH</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GAME SCREEN ==================== -->
+  <section id="game-screen" class="screen overflow-hidden">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- HUD Overlay -->
+    <div id="game-hud" class="absolute top-0 left-0 w-full px-4 pt-3 pointer-events-none z-20">
+      <div class="flex items-center justify-between mb-2">
+        <button id="btn-pause" class="pointer-events-auto w-9 h-9 rounded-lg flex items-center justify-center bg-navy/60 border border-mauve/30" aria-label="Pause">
+          <i class="fas fa-pause text-sm text-lavender"></i>
+        </button>
+        <div class="flex items-center gap-1">
+          <i class="fas fa-coins text-xs text-gold"></i>
+          <span class="font-display font-bold text-sm text-gold" id="hud-cash">0</span>
+        </div>
+      </div>
+
+      <!-- Health Bar -->
+      <div class="hud-bar-bg mb-1">
+        <div class="hud-bar-fill" id="hud-health" style="width:100%;background:linear-gradient(90deg,var(--danger),var(--success))"></div>
+      </div>
+
+      <!-- Wave Info & Buffs -->
+      <div class="flex items-center justify-between">
+        <span class="font-display text-xs font-bold text-mauve" id="hud-wave">WAVE 1/3</span>
+        <div id="hud-buffs" class="flex gap-1">
+          <!-- Buff indicators injected by JS -->
+        </div>
+      </div>
+
+      <!-- Pause Overlay -->
+      <div id="pause-overlay" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-5 z-30 bg-navy/85 backdrop-blur-sm">
+        <p class="font-display text-2xl font-black text-lavender">PAUSED</p>
+        <button id="btn-resume" class="btn-primary">RESUME</button>
+        <button id="btn-quit-stage" class="btn-secondary">QUIT MISSION</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== STAGE COMPLETE SCREEN ==================== -->
+  <section id="stage-complete-screen" class="screen">
+    <div class="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-5">
+      <div class="glass-strong w-full max-w-sm p-6 flex flex-col items-center gap-4 anim-slide-in">
+        <i class="fas fa-check-circle text-5xl text-success"></i>
+        <p class="font-display text-2xl font-black text-success">STAGE CLEAR</p>
+        <p class="text-sm text-mauve" id="complete-stage-name">Level 0 - Stage 1</p>
+
+        <div class="w-full h-px bg-mauve"></div>
+
+        <!-- Cash Reward -->
+        <div class="w-full flex items-center justify-center gap-2">
+          <i class="fas fa-coins text-gold"></i>
+          <span class="font-display text-3xl font-black text-gold" id="complete-reward">+150</span>
+        </div>
+
+        <!-- Bonus Details -->
+        <div id="complete-bonuses" class="w-full flex flex-col gap-1 text-sm">
+          <!-- Bonus lines injected by JS -->
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col gap-3 w-full mt-2">
+          <button id="btn-next-stage" class="btn-primary w-full">NEXT STAGE</button>
+          <button id="btn-complete-levels" class="btn-secondary w-full">LEVEL SELECT</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== STAGE FAILED SCREEN ==================== -->
+  <section id="stage-failed-screen" class="screen">
+    <div class="flex-1 flex flex-col items-center justify-center px-6 py-10 gap-5">
+      <div class="glass-strong w-full max-w-sm p-6 flex flex-col items-center gap-4 anim-slide-in">
+        <i class="fas fa-times-circle text-5xl text-danger"></i>
+        <p class="font-display text-2xl font-black text-danger">MISSION FAILED</p>
+        <p class="text-sm text-center text-mauve" id="fail-reason">Your aircraft was destroyed</p>
+
+        <div class="flex flex-col gap-3 w-full mt-2">
+          <button id="btn-retry" class="btn-primary w-full">RETRY</button>
+          <button id="btn-fail-levels" class="btn-secondary w-full">LEVEL SELECT</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SETTINGS SCREEN ==================== -->
+  <section id="settings-screen" class="screen">
+    <div class="flex-1 flex flex-col px-4 py-4 gap-4 overflow-y-auto">
+      <header class="flex items-center gap-3">
+        <button id="btn-settings-back" class="w-10 h-10 flex items-center justify-center rounded-lg bg-mauve/25" aria-label="Back">
+          <i class="fas fa-chevron-left text-lavender"></i>
+        </button>
+        <h1 class="font-display text-lg font-bold text-lavender">SETTINGS</h1>
+      </header>
+
+      <!-- Toggles -->
+      <div class="glass p-4 flex flex-col gap-4">
+        <div class="flex items-center justify-between">
+          <span class="text-sm">Sound Effects</span>
+          <button id="btn-sfx-toggle" class="toggle-btn" data-on="false" aria-label="Toggle sound effects">
+            <div class="toggle-knob" id="sfx-knob"></div>
+          </button>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm">Vibration</span>
+          <button id="btn-vib-toggle" class="toggle-btn" data-on="false" aria-label="Toggle vibration">
+            <div class="toggle-knob" id="vib-knob"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Account Info -->
+      <div class="glass p-4">
+        <p class="font-display text-xs font-bold mb-2 text-mauve">ACCOUNT</p>
+        <p class="text-sm mb-1 text-mauve">Email</p>
+        <p class="text-sm font-bold" id="settings-email">&mdash;</p>
+        <p class="text-sm mt-3 mb-1 text-mauve">Member Since</p>
+        <p class="text-sm" id="settings-created">&mdash;</p>
+      </div>
+
+      <!-- Reset -->
+      <button id="btn-reset-data" class="btn-secondary w-full border-danger/40 text-danger">RESET ALL DATA</button>
+
+      <div class="h-4"></div>
+    </div>
+  </section>
+
+  <!-- ==================== PROFILE SCREEN ==================== -->
+  <section id="profile-screen" class="screen">
+    <div class="flex-1 flex flex-col px-4 py-4 gap-4 overflow-y-auto">
+      <header class="flex items-center gap-3">
+        <button id="btn-profile-back" class="w-10 h-10 flex items-center justify-center rounded-lg bg-mauve/25" aria-label="Back">
+          <i class="fas fa-chevron-left text-lavender"></i>
+        </button>
+        <h1 class="font-display text-lg font-bold text-lavender">PILOT PROFILE</h1>
+      </header>
+
+      <!-- Avatar & Name -->
+      <div class="glass p-5 flex flex-col items-center gap-3">
+        <div id="profile-avatar-lg" class="w-20 h-20 rounded-full flex items-center justify-center font-display font-bold text-3xl bg-gradient-to-br from-purple to-mauve text-accent">
+          P
+        </div>
+        <p class="font-display text-xl font-bold" id="profile-name-lg">Pilot</p>
+        <div class="flex gap-6 text-center">
+          <div>
+            <p class="font-display font-bold text-lg text-accent" id="prof-level">0</p>
+            <p class="text-xs text-mauve">Level</p>
+          </div>
+          <div>
+            <p class="font-display font-bold text-lg text-gold" id="prof-cash">0</p>
+            <p class="text-xs text-mauve">Cash</p>
+          </div>
+          <div>
+            <p class="font-display font-bold text-lg text-lavender" id="prof-stages">0</p>
+            <p class="text-xs text-mauve">Cleared</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progression Details -->
+      <div class="glass p-4">
+        <p class="font-display text-xs font-bold mb-3 text-mauve">PROGRESSION</p>
+        <div id="profile-progress" class="flex flex-col gap-2">
+          <!-- Progress bars injected by JS -->
+        </div>
+      </div>
+
+      <div class="h-4"></div>
+    </div>
+  </section>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Game Logic -->
+  <script src="game.js"></script>
+</body>
+</html>
