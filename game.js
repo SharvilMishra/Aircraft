@@ -81,6 +81,7 @@ function defP(){return{name:'Pilot',email:'',level:0,stage:0,cash:0,totalCash:0,
 function loadP(){try{const d=JSON.parse(localStorage.getItem('vs_p'));if(d&&d.email)return d}catch(e){}return defP()}
 function saveP(){localStorage.setItem('vs_p',JSON.stringify(P))}
 let P=loadP();
+if(P.stage!==Math.floor(P.stage))P.stage=Math.floor(P.stage);
 
 /* ===== AUTH ===== */
 async function authOK(user,name){
